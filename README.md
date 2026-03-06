@@ -1,8 +1,8 @@
-# 🤖 AI Vendor Generation System
+# 🧞 ProcureGenie-Local-LLM
 
-An AI-powered procurement vendor generation system built using **FastAPI ⚡, Ollama 🧠, and PostgreSQL 🗄️**.
+An AI-powered procurement vendor generation system built using **FastAPI ⚡, React ⚛️, Ollama 🧠, and PostgreSQL 🗄️**.
 
-This system follows a **Database-First, LLM-Fallback architecture** to ensure fast response, reduced LLM usage, and efficient vendor storage.
+ProcureGenie follows a **Database-First, LLM-Fallback architecture** to ensure fast response, reduced LLM usage, and efficient vendor storage using local AI models.
 
 ---
 
@@ -57,31 +57,39 @@ This system follows a **Database-First, LLM-Fallback architecture** to ensure fa
 ## 📁 Project Structure
 
 ```
-📦 ai-vendor-generation
+📦 ProcureGenie-Local-LLM
 │
-├── 📁 app/
+├── 📁 app/                 # FastAPI Backend
 │   ├── 📁 api/             # API Router and Endpoints
 │   ├── 📁 core/            # Configuration & Settings
 │   ├── 📁 db/              # Database session management
 │   ├── 📁 models/          # SQLAlchemy Models
-│   ├── 📁 schemas/         # Pydantic Schemas
-│   ├── 📁 services/        # Business logic & 3rd party services
-│   ├── 📁 repositories/    # Data access layer
+│   ├── 📁 services/        # Ollama & Business Logic
 │   └── 🐍 main.py          # App entry point
-├── 📁 frontend-main/       # React Frontend
-├── 📝 README.md            # Documentation
-└── 📄 requirements.txt
+│
+├── 📁 frontend-main/       # React Frontend (Vite)
+│   ├── 📁 components/      # UI Components (Aceternity UI, Tailwind)
+│   └── 📁 src/             # Frontend Logic & API Integration
+│
+├── 🐳 Dockerfile           # Backend Dockerization
+├── 📄 docker-compose.yml   # Full Stack Orchestration
+└── 📄 requirements.txt     # Python Dependencies
 ```
 
 ---
 
 ## ⚙️ Installation Guide
 
-### 1️⃣ Clone Repository
+### 1️⃣ Prerequisites
+- **Python 3.10+**
+- **Node.js & npm**
+- **PostgreSQL**
+- **Ollama** (installed and running)
 
-```
-git clone https://github.com/yourusername/ai-vendor-generation.git
-cd ai-vendor-generation
+### 2️⃣ Clone Repository
+```bash
+git clone https://github.com/divydoesnotcode/ProcureGenie-Local-LLM.git
+cd ProcureGenie-Local-LLM
 ```
 
 ---
@@ -108,13 +116,25 @@ venv\Scripts\activate
 
 ```
 pip install -r requirements.txt
+
+# Run server
+uvicorn app.main:app --reload
 ```
+*Backend runs at `http://localhost:8000`*
+
+### 4️⃣ Frontend Setup ⚛️
+```bash
+cd frontend-main
+npm install
+npm run dev
+```
+*Frontend runs at `http://localhost:5173`*
 
 ---
 
-## 🧠 Setup Ollama
+## 🧠 Local LLM Setup (Ollama)
 
-Start Ollama server:
+Start the Ollama server and pull the required model:
 
 ```
 ollama serve
@@ -262,7 +282,7 @@ Uses multiple safety layers:
 
 ## 👨‍💻 Author
 
-**Divy Barot**  
+**Divy Barot**
 ---
 
 ## 🚀 Future Improvements
