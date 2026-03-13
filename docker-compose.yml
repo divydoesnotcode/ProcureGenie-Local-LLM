@@ -9,7 +9,7 @@ services:
     environment:
       - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-aivendor}
       - OLLAMA_URL=${OLLAMA_URL:-http://host.docker.internal:11434/api/generate}
-      - MODEL_NAME=${MODEL_NAME:-ministral-3:3b}
+      - MODEL_NAME=${MODEL_NAME:-ministral-3:8b}
     env_file:
       - .env
     depends_on:
@@ -44,7 +44,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-aivendor}
     ports:
-      - "5432:5432"
+      - "5431:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
