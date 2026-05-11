@@ -1,300 +1,199 @@
 # 🧞 ProcureGenie-Local-LLM
 
-An AI-powered procurement vendor generation system built using **FastAPI ⚡, React ⚛️, Ollama 🧠, and PostgreSQL 🗄️**.
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Ollama](https://img.shields.io/badge/Ollama-Local--AI-blue?style=for-the-badge)](https://ollama.ai/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
-ProcureGenie follows a **Database-First, LLM-Fallback architecture** to ensure fast response, reduced LLM usage, and efficient vendor storage using local AI models.
+**ProcureGenie** is a next-generation AI-powered procurement intelligence system. It leverages **Local LLMs (Ollama)** to dynamically discover and generate vendor information when traditional database lookups fail. Built with a "Database-First, LLM-Fallback" architecture, it ensures high performance and data persistence.
 
 ---
 
-## ✨ Features
+## 🚀 Vision
 
-- ⚡ FastAPI high-performance backend  
-- 🧠 Ollama LLM integration (ministral-3:8b)  
-- 🗄️ PostgreSQL vendor database  
-- 🔍 Database-first vendor search  
-- 🤖 Automatic vendor generation using AI  
-- 🚫 Duplicate vendor prevention  
-- 📦 Structured JSON output  
-- 🏗️ Production-ready architecture  
+ProcureGenie aims to solve the "Cold Start" problem in procurement databases. Instead of returning "No results found," the system utilizes AI to hallucinate (with validation) potential vendors, which are then saved to a permanent vault for future users, effectively growing your procurement database with every query.
+
+---
+
+## ✨ Key Features
+
+-   **⚡ High-Performance Backend:** Built with FastAPI and asynchronous database operations.
+-   **🧠 Intelligent Fallback:** Automatically triggers Ollama (Local LLM) when no matching vendors are found in the database.
+-   **🗄️ Permanent Vault:** Every AI-generated vendor is sanitized and saved to PostgreSQL to prevent redundant LLM calls.
+-   **⚛️ Premium UI:** A stunning, Apple-inspired glassmorphic interface built with React, Vite, and Framer Motion.
+-   **🔍 Multi-Mode Search:** Toggle between "Vault Search" (Database) and "AI Generation" (Ollama).
+-   **🚫 Duplicate Prevention:** Sophisticated database constraints and normalization to ensure data integrity.
+-   **🐳 Containerized:** Ready for deployment with Docker and Docker Compose.
 
 ---
 
 ## 🧠 System Architecture
 
-```
-👤 User Request
-     ↓
-⚡ FastAPI Server
-     ↓
-🗄️ PostgreSQL Database
-     ↓
-✅ Vendors Found → Return Result
-❌ Vendors Not Found → 🧠 Ollama LLM
-                          ↓
-                    🤖 Generate Vendors
-                          ↓
-                    💾 Save to Database
-                          ↓
-                    📤 Return Response
+```mermaid
+graph TD
+    A[👤 User Request] --> B[⚡ FastAPI Server]
+    B --> C{🗄️ DB Check}
+    C -- "✅ Found" --> D[📤 Return Database Vendors]
+    C -- "❌ Not Found" --> E[🧠 Ollama LLM]
+    E --> F[🤖 Generate Structured JSON]
+    F --> G[💾 Save to PostgreSQL]
+    G --> H[📤 Return AI-Generated Vendors]
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Technology Stack
 
-| Technology | Icon | Purpose |
-|----------|------|---------|
-| Python | 🐍 | Core programming language |
-| FastAPI | ⚡ | Backend framework |
-| Ollama | 🧠 | LLM runtime |
-| ministral-3:8b | 🤖 | AI model |
-| PostgreSQL | 🗄️ | Database |
-| psycopg2 | 🔌 | Database connector |
-| JSON | 📦 | Data format |
+### Backend
+-   **Framework:** FastAPI (Python 3.10+)
+-   **ORM:** SQLAlchemy (Async)
+-   **Database:** PostgreSQL
+-   **LLM Engine:** Ollama (Local)
+-   **Models:** `ministral-3:8b` (default), `qwen3-vl:8b` (optional)
+-   **Validation:** Pydantic v2
+
+### Frontend
+-   **Framework:** React 18 (Vite)
+-   **Styling:** Tailwind CSS + Vanilla CSS
+-   **Components:** Aceternity UI (Background Beams, Sidebar, Cards)
+-   **Animations:** Framer Motion (Smooth Apple-style easing)
+-   **Icons:** Lucide React
 
 ---
 
 ## 📁 Project Structure
 
-```
+```bash
 📦 ProcureGenie-Local-LLM
-│
-├── 📁 app/                 # FastAPI Backend
-│   ├── 📁 api/             # API Router and Endpoints
-│   ├── 📁 core/            # Configuration & Settings
-│   ├── 📁 db/              # Database session management
-│   ├── 📁 models/          # SQLAlchemy Models
-│   ├── 📁 services/        # Ollama & Business Logic
-│   └── 🐍 main.py          # App entry point
-│
-├── 📁 frontend-main/       # React Frontend (Vite)
-│   ├── 📁 components/      # UI Components (Aceternity UI, Tailwind)
-│   └── 📁 src/             # Frontend Logic & API Integration
-│
-├── 🐳 Dockerfile           # Backend Dockerization
-├── 📄 docker-compose.yml   # Full Stack Orchestration
-└── 📄 requirements.txt     # Python Dependencies
+├── 📁 app/                     # Backend Source Code
+│   ├── 📁 api/                 # API Endpoints (v1)
+│   ├── 📁 core/                # Config (Pydantic Settings)
+│   ├── 📁 db/                  # Database Session & Base
+│   ├── 📁 models/              # SQLAlchemy Models
+│   ├── 📁 repositories/        # Data Access Layer
+│   ├── 📁 schemas/             # Pydantic Schemas
+│   ├── 📁 services/            # LLM Logic (Ollama)
+│   └── 🐍 main.py              # Application Entry Point
+├── 📁 frontend-main/           # React Frontend
+│   ├── 📁 components/          # Reusable UI Components
+│   ├── 📁 src/                 # App Logic & API Hooks
+│   └── 📁 public/              # Static Assets
+├── 🐳 Dockerfile               # Backend Dockerfile
+├── 📄 docker-compose.yml       # Orchestration
+├── 📄 requirements.txt         # Python Deps
+└── 📄 .env.example             # Configuration Template
 ```
 
 ---
 
-## ⚙️ Installation Guide
+## ⚙️ Installation & Setup
 
 ### 1️⃣ Prerequisites
-- **Python 3.10+**
-- **Node.js & npm**
-- **PostgreSQL**
-- **Ollama** (installed and running)
+-   **Python 3.10+**
+-   **Node.js 18+**
+-   **PostgreSQL** (Running)
+-   **Ollama** (Installed: [Download here](https://ollama.ai/))
 
-### 2️⃣ Clone Repository
+### 2️⃣ Clone & Environment
 ```bash
 git clone https://github.com/divydoesnotcode/ProcureGenie-Local-LLM.git
 cd ProcureGenie-Local-LLM
+
+# Copy env template
+cp .env.example .env
 ```
 
----
-
-### 2️⃣ Create Virtual Environment
-
-Mac/Linux 🍎🐧
-
-```
+### 3️⃣ Backend Setup
+```bash
+# Create and activate virtual environment
 python -m venv venv
-source venv/bin/activate
-```
+source venv/activate  # Windows: venv\Scripts\activate
 
-Windows 🪟
-
-```
-python -m venv venv
-venv\Scripts\activate
-```
-
----
-
-### 3️⃣ Install Dependencies 📦
-
-```
+# Install dependencies
 pip install -r requirements.txt
 
-# Run server
+# Start FastAPI (Reload mode)
 uvicorn app.main:app --reload
 ```
-*Backend runs at `http://localhost:8000`*
 
-### 4️⃣ Frontend Setup ⚛️
+### 4️⃣ Frontend Setup
 ```bash
 cd frontend-main
 npm install
 npm run dev
 ```
-*Frontend runs at `http://localhost:5173`*
 
----
-
-## 🧠 Local LLM Setup (Ollama)
-
-Start the Ollama server and pull the required model:
-
-```
-ollama serve
-```
-
-Pull AI model:
-
-```
+### 5️⃣ Ollama Model Setup
+Ensure Ollama is running and pull the required model:
+```bash
 ollama pull ministral-3:8b
-```
-
-Verify installation:
-
-```
-ollama list
+# Or the one specified in your .env
 ```
 
 ---
 
-## 🗄️ PostgreSQL Setup
+## 📋 Environment Variables (`.env`)
 
-Create database:
-
-```
-CREATE DATABASE ai_python;
-```
-
-Create vendors table:
-
-```
-CREATE TABLE vendors (
-    id SERIAL PRIMARY KEY,
-    item_name TEXT NOT NULL,
-    location TEXT NOT NULL,
-    vendor_name TEXT NOT NULL,
-    address TEXT,
-    phone TEXT,
-    email TEXT,
-    website TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(item_name, location, vendor_name)
-);
-```
+| Variable | Description | Default |
+| :--- | :--- | :--- |
+| `DATABASE_URL` | PostgreSQL Async Connection String | `postgresql+asyncpg://...` |
+| `OLLAMA_URL` | Ollama API Endpoint | `http://localhost:11434/api/generate` |
+| `MODEL_NAME` | The AI model to use | `ministral-3:8b` |
+| `APP_NAME` | Name of the Application | `AI Vendor Generation System` |
 
 ---
 
-## ▶️ Run FastAPI Server
+## 📡 API Documentation
 
-```
-uvicorn app.main:app --reload
-```
+The backend provides a Swagger UI at `http://localhost:8000/docs`.
 
-Server URL 🌐
+### Key Endpoints
 
-```
-http://127.0.0.1:8000
-```
-
-Swagger Docs 📄
-
-```
-http://127.0.0.1:8000/docs
-```
-
----
-
-## 📡 API Example
-
-### 📥 Request
-
-```
-POST /vendors
-```
-
-```
-{
-  "item": "cement",
-  "location": "Ahmedabad"
-}
-```
+#### `POST /api/v1/vendors/generate-vendors-flow`
+The main intelligent search endpoint.
+-   **Request:**
+    ```json
+    {
+      "item": "cement",
+      "location": "Mumbai"
+    }
+    ```
+-   **Behavior:**
+    1.  Checks DB for `item="cement"` and `location="Mumbai"`.
+    2.  If found, returns 200 OK from DB.
+    3.  If not found, calls Ollama, parses JSON, saves to DB, and returns result.
 
 ---
 
-### 📤 Response (Database)
+## 🐳 Docker Deployment
 
+Run the entire stack (PostgreSQL + Backend + Frontend) using Docker:
+
+```bash
+docker-compose up --build
 ```
-{
-  "source": "database",
-  "count": 5,
-  "vendors": [...]
-}
-```
+*Note: Ensure your local Ollama instance is accessible from the Docker container (usually via `host.docker.internal`).*
 
 ---
 
-### 📤 Response (LLM)
+## 🤝 Contributing
 
-```
-{
-  "source": "llm",
-  "generated": 5,
-  "saved": 5,
-  "vendors": [...]
-}
-```
-
----
-
-## 🔄 Workflow
-
-```
-👤 User Request
-   ↓
-⚡ FastAPI
-   ↓
-🗄️ PostgreSQL Check
-   ↓
-❌ Not Found → 🧠 Ollama
-   ↓
-💾 Save Vendors
-   ↓
-📤 Return Response
-```
-
----
-
-## 🚫 Duplicate Prevention
-
-Uses multiple safety layers:
-
-- 🧠 Data normalization
-- 🗄️ PostgreSQL UNIQUE constraint
-- ⚡ Conflict handling logic
-
----
-
-## 🎯 Use Cases
-
-- 🏭 Procurement automation  
-- 🏢 Vendor discovery systems  
-- 🤖 AI supply chain tools  
-- 📊 Vendor intelligence platforms  
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
 
 ---
 
 ## 👨‍💻 Author
 
-**Divy Barot**
----
-
-## 🚀 Future Improvements
-
-- 📊 Vendor ranking system  
-- 🧠 Confidence scoring  
-- 🔎 Vendor verification  
-- 🌐 Admin dashboard  
-- 📦 Vector database integration  
+**Divy Barot**  
+GitHub: [@divydoesnotcode](https://github.com/divydoesnotcode)
 
 ---
 
 ## 📜 License
 
-MIT License 📄
+This project is licensed under the **MIT License**. See the `LICENSE` file for details.
