@@ -4,7 +4,6 @@
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![Ollama](https://img.shields.io/badge/Ollama-Local--AI-blue?style=for-the-badge)](https://ollama.ai/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
 **ProcureGenie** is a next-generation AI-powered procurement intelligence system. It leverages **Local LLMs (Ollama)** to dynamically discover and generate vendor information when traditional database lookups fail. Built with a "Database-First, LLM-Fallback" architecture, it ensures high performance and data persistence.
 
@@ -24,7 +23,6 @@ ProcureGenie aims to solve the "Cold Start" problem in procurement databases. In
 -   **⚛️ Premium UI:** A stunning, Apple-inspired glassmorphic interface built with React, Vite, and Framer Motion.
 -   **🔍 Multi-Mode Search:** Toggle between "Vault Search" (Database) and "AI Generation" (Ollama).
 -   **🚫 Duplicate Prevention:** Sophisticated database constraints and normalization to ensure data integrity.
--   **🐳 Containerized:** Ready for deployment with Docker and Docker Compose.
 
 ---
 
@@ -79,8 +77,6 @@ graph TD
 │   ├── 📁 components/          # Reusable UI Components
 │   ├── 📁 src/                 # App Logic & API Hooks
 │   └── 📁 public/              # Static Assets
-├── 🐳 Dockerfile               # Backend Dockerfile
-├── 📄 docker-compose.yml       # Orchestration
 ├── 📄 requirements.txt         # Python Deps
 └── 📄 .env.example             # Configuration Template
 ```
@@ -163,17 +159,6 @@ The main intelligent search endpoint.
     1.  Checks DB for `item="cement"` and `location="Mumbai"`.
     2.  If found, returns 200 OK from DB.
     3.  If not found, calls Ollama, parses JSON, saves to DB, and returns result.
-
----
-
-## 🐳 Docker Deployment
-
-Run the entire stack (PostgreSQL + Backend + Frontend) using Docker:
-
-```bash
-docker-compose up --build
-```
-*Note: Ensure your local Ollama instance is accessible from the Docker container (usually via `host.docker.internal`).*
 
 ---
 
